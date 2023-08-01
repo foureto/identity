@@ -7,7 +7,7 @@ namespace g.identity.business.Handlers.Admin.Applications;
 
 public class GetApplicationQuery : IRequest<Result<Application>>
 {
-    public string Id { get; set; }
+    public string ApplicationId { get; set; }
 }
 
 public class GetApplicationHandler : IRequestHandler<GetApplicationQuery , Result<Application>>
@@ -21,7 +21,7 @@ public class GetApplicationHandler : IRequestHandler<GetApplicationQuery , Resul
     
     public async Task<Result<Application>> Handle(GetApplicationQuery request, CancellationToken cancellationToken)
     {
-        var app = await _unitOfWork.Apps.Read(e => e.Id == request.Id, cancellationToken);
+        var app = await _unitOfWork.Apps.Read(e => e.Id == request.ApplicationId, cancellationToken);
         return app is null ? Result<Application>.NotFound("Application not found") : Result<Application>.Ok(app);
     }
 }

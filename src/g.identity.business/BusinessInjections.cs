@@ -18,6 +18,7 @@ public static class BusinessInjections
             .Configure<AppSettings>(opts => configuration.GetSection("app").Bind(opts))
             .AddScoped<ISessionProvider, SessionProvider>()
             .AddSingleton<IRandomStringGenerator, RandomStringGenerator>()
+            .AddSingleton<IOtpService, OtpService>()
             .AddMediatR(cfg => cfg
                 .RegisterServicesFromAssemblies(Assembly.GetExecutingAssembly())
                 .AddOpenBehavior(typeof(ErrorHandlingBehaviour<,>))

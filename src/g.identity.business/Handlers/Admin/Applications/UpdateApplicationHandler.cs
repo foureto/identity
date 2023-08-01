@@ -6,8 +6,10 @@ namespace g.identity.business.Handlers.Admin.Applications;
 
 public class UpdateApplicationCommand : IRequest<Result>
 {
-    public string Id { get; set; }
+    public string ApplicationId { get; set; }
     public string Name { get; set; }
+    public string Description { get; set; }
+    public string UpdatedById { get; set; }
 }
 
 public class UpdateApplicationHandler : IRequestHandler<UpdateApplicationCommand, Result>
@@ -18,19 +20,22 @@ public class UpdateApplicationHandler : IRequestHandler<UpdateApplicationCommand
     {
         _unitOfWork = unitOfWork;
     }
-    
+
     public async Task<Result> Handle(UpdateApplicationCommand request, CancellationToken cancellationToken)
     {
-        var app = await _unitOfWork.Apps.Read(e => e.Id == request.Id, cancellationToken);
+        var app = await _unitOfWork.Apps.Read(e => e.Id == request.ApplicationId, cancellationToken);
         if (app is null)
             return Result.NotFound("Application not found");
 
         if (app.Name == request.Name)
             return Result.Ok();
-        
+
         app.Name = request.Name;
+        app.Description = request.Description;
+        app.UpdatedById = request.UpdatedById;
+
         await _unitOfWork.Apps.UpdateAndSave(app, cancellationToken);
-        
+
         return Result.Ok("Application updated");
     }
 }

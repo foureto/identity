@@ -16,6 +16,8 @@ public class IdentityAppContext : IdentityDbContext<
     IdentityUserToken<string>>
 {
     public DbSet<Application> Applications { get; set; }
+    public DbSet<OtpCode> OtpCodes { get; set; }
+    public DbSet<SecondFactor> SecondFactors { get; set; }
 
     public IdentityAppContext(DbContextOptions<IdentityAppContext> options) : base(options)
     {

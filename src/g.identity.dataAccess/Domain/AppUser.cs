@@ -5,6 +5,7 @@ namespace g.identity.dataAccess.Domain;
 
 public class AppUser : IdentityUser<string>
 {
+    [MaxLength(255)] public string ClientId { get; set; }
     [MaxLength(255)] public string Nickname { get; set; }
     [MaxLength(128)] public string AppId { get; set; }
     public DateTime Created { get; set; } = DateTime.UtcNow;

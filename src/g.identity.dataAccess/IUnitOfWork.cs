@@ -8,4 +8,9 @@ public interface IUnitOfWork
     
     IAppRepository Apps { get; }
     IUsersRepository Users { get; }
+    IRolesRepository Roles { get; }
+    IUserRolesRepository UserRoles { get; }
+    IOtpCodesRepository OtpCodes { get; }
+
+    Task<bool> Save();
 }

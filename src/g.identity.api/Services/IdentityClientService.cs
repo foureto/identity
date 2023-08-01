@@ -31,4 +31,7 @@ internal class IdentityClientService : MediatedService, IIdentityClient
             UpdateSecondFactorCommand,
             SecondFactorDto, 
             SecondFactorResponse>(request, token);
+
+    public ValueTask<Result> SetUserInfo(SetUserInfoRequest request, CancellationToken token = default)
+        => Mediate<SetUserInfoRequest, SetUserInfoCommand>(request, token);
 }

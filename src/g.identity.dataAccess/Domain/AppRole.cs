@@ -9,4 +9,10 @@ public class AppRole : IdentityRole<string>
     
     public Application App { get; set; }
     public List<AppUserRole> UserRoles { get; set; } = new();
+
+    public string CreatedById { get; set; }
+    public AppUser CreatedBy { get; set; }
+    
+    public string UpdatedById { get; set; }
+    public AppUser UpdatedBy { get; set; }
 }

@@ -20,4 +20,7 @@ public interface IIdentityClient
     [OperationContract]
     ValueTask<Result<SecondFactorResponse>> ChangeSecondFactor(
         UpdateSecondFactorRequest request, CancellationToken token = default);
+
+    [OperationContract]
+    ValueTask<Result> SetUserInfo(SetUserInfoRequest request, CancellationToken token = default);
 }

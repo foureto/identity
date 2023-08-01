@@ -7,8 +7,10 @@ namespace g.identity.business.Handlers.Admin.Applications;
 
 public class RemoveApplicationCommand : IRequest<Result>
 {
-    public string Id { get; set; }
+    public string ApplicationId { get; set; }
+    public string RemovedById { get; set; }
 }
+
 public class RemoveApplicationHandler : IRequestHandler<RemoveApplicationCommand, Result>
 {
     private readonly IUnitOfWork _unitOfWork;
@@ -17,14 +19,14 @@ public class RemoveApplicationHandler : IRequestHandler<RemoveApplicationCommand
     {
         _unitOfWork = unitOfWork;
     }
-    
+
     public async Task<Result> Handle(RemoveApplicationCommand request, CancellationToken cancellationToken)
     {
-        if (!await _unitOfWork.Apps.Any(e => e.Id == request.Id, cancellationToken))
+        if (!await _unitOfWork.Apps.Any(e => e.Id == request.ApplicationId, cancellationToken))
             return Result.Bad("Application does not exists");
 
-        await _unitOfWork.Apps.RemoveAndSave(new Application { Id = request.Id }, cancellationToken);
-            
-        return Result.Ok($"Application '{request.Id}' removed");
+        await _unitOfWork.Apps.RemoveAndSave(new Application { Id = request.ApplicationId }, cancellationToken);
+
+        return Result.Ok($"Application '{request.ApplicationId}' removed");
     }
 }

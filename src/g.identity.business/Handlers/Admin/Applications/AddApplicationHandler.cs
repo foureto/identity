@@ -7,8 +7,9 @@ namespace g.identity.business.Handlers.Admin.Applications;
 
 public class AddApplicationCommand : IRequest<Result>
 {
-    public string Id { get; set; }
     public string Name { get; set; }
+    public string Description { get; set; }
+    public string CreatedById { get; set; }
 }
 
 public class AddApplicationHandler : IRequestHandler<AddApplicationCommand, Result>
@@ -19,15 +20,18 @@ public class AddApplicationHandler : IRequestHandler<AddApplicationCommand, Resu
     {
         _unitOfWork = unitOfWork;
     }
-    
+
     public async Task<Result> Handle(AddApplicationCommand request, CancellationToken cancellationToken)
     {
-        if (await _unitOfWork.Apps.Any(e => e.Id == request.Id, cancellationToken))
-            return Result.Bad("Application already exists");
-        
-        var entity = _unitOfWork.Apps.AddAndSave(
-            new Application { Id = request.Id, Name = request.Name }, cancellationToken);
-        
+        await _unitOfWork.Apps.AddAndSave(
+            new Application
+            {
+                Id = Guid.NewGuid().ToString("N"),
+                Name = request.Name,
+                Description = request.Description,
+                CreatedById = request.CreatedById,
+            }, cancellationToken);
+
         return Result.Ok($"Application '{request.Name}' created");
     }
 }

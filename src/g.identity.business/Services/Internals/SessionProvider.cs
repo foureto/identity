@@ -39,12 +39,12 @@ internal class SessionProvider : ISessionProvider
         }
     }
 
-    public async Task<Result<(string jwt, string refresh)>> NewToken(string userId, bool temp)
+    public async Task<Result<(string jwt, string refresh, string jti)>> NewToken(string userId, bool temp)
     {
         var user = await _unitOfWork.Users.Read(
             e => e.Id == userId, e => new { e.Id, e.Nickname, e.AppId, e.Email });
         if (user is null)
-            return Result<(string jwt, string refresh)>.NotFound("User not found");
+            return Result<(string jwt, string refresh, string jti)>.NotFound("User not found");
 
         var userClaims = await _unitOfWork.Users.GetUserClaims(userId);
 
@@ -62,6 +62,6 @@ internal class SessionProvider : ISessionProvider
         userClaims.ForEach(c => jwtBuilder.AddClaim(c.Type, c.Value));
         jwtBuilder.WithSecret(temp ? _options.Value.TempKey : _options.Value.CommonKey);
 
-        return Result<(string jwt, string refresh)>.Ok((jwtBuilder.Encode(), jti.Sha512()));
+        return Result<(string jwt, string refresh, string jti)>.Ok((jwtBuilder.Encode(), jti.Sha512(), jti));
     }
 }
